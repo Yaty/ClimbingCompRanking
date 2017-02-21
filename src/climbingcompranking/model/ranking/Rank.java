@@ -15,22 +15,24 @@
  */
 package climbingcompranking.model.ranking;
 
-import climbingcompranking.model.Competition;
+import climbingcompranking.model.Competition.CompetitionType;
 import climbingcompranking.model.climber.Climber;
-import climbingcompranking.model.climber.exceptions.CompetitionTypeUninitializedException;
 
 /**
  *
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
 public class Rank {
-    private final Climber climber;
     private int leadRank, speedRank, boulderingRank;
     private int overallRank;
     private boolean exaequo;
     
-    public Rank(Climber climber, int leadRank, int speedRank, int boulderingRank) {
-        this.climber = climber;
+    public Rank() {
+        exaequo = false;
+        leadRank = speedRank = boulderingRank = 0;
+    }
+    
+    public Rank(int leadRank, int speedRank, int boulderingRank) {
         this.leadRank = leadRank;
         this.speedRank = speedRank;
         this.boulderingRank = boulderingRank;
@@ -60,12 +62,8 @@ public class Rank {
         this.boulderingRank = boulderingRank;
     }    
     
-    public String getClimberFullName() {
-        return climber.getFullName();
-    }
-    
-    public int getTotalPoints() throws CompetitionTypeUninitializedException {
-        switch(Competition.compType) {
+    public int getTotalPoints(CompetitionType compType) {
+        switch(compType) {
             case BOULDERING:
                 return boulderingRank;
             case LEAD:
@@ -81,7 +79,7 @@ public class Rank {
             case COMBINED:
                 return leadRank + boulderingRank + speedRank;
             default:
-                throw new CompetitionTypeUninitializedException("Can't calculate total point if the competetition type is not defined.");                
+                return -6666; // compType is final in Competition so there is non way we reach this instruction                
         }
     }
 
@@ -101,7 +99,4 @@ public class Rank {
         this.exaequo = exaequo;
     }
 
-    public Climber getClimber() {
-        return climber;
-    }
 }

@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package climbingcompranking.model.climber.exceptions;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 /**
  *
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
-public class CompetitionTypeUninitializedException extends Exception {
-    public CompetitionTypeUninitializedException() {
-        super();
+@RunWith(Suite.class)
+@Suite.SuiteClasses(
+    {
+        BoulderingRankingTest.class,
+        LeadBoulderingRankingTest.class,
+        SpeedBoulderingRankingTest.class,
+        SpeedLeadRankingTest.class,
+        SpeedRankingTest.class,
+        CombinedRankingTest.class,
+        LeadRankingTest.class
     }
-    
-    public CompetitionTypeUninitializedException(String message) {
-        super(message);
-    }
-    
-    public CompetitionTypeUninitializedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-    
-    public CompetitionTypeUninitializedException(Throwable cause) {
-        super(cause);
-    }       
-}
+)
+public class TestLauncher {}

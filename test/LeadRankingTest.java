@@ -32,14 +32,13 @@ public class LeadRankingTest {
     
     @BeforeClass
     public static void init() {
-        LeadRankingTest.competition = Competition.getInstance();
-        Competition.compType = Competition.CompetitionType.LEAD;
-        LeadRankingTest.c1 = new Climber(0, "Hugo", "Da Roit", Category.SENIOR);
-        LeadRankingTest.c2 = new Climber(1, "Pierre", "Laguette", Category.SENIOR);
-        LeadRankingTest.c3 = new Climber(2, "Thomas", "Paillette", Category.SENIOR);
-        competition.addClimber(c1);
-        competition.addClimber(c2);
-        competition.addClimber(c3);        
+        LeadRankingTest.competition = new Competition(Competition.CompetitionType.LEAD);
+        LeadRankingTest.c1 = new Climber(0, "Hugo", "Da Roit", Category.SENIOR, competition.getCompetitionType());
+        LeadRankingTest.c2 = new Climber(1, "Pierre", "Laguette", Category.SENIOR, competition.getCompetitionType());
+        LeadRankingTest.c3 = new Climber(2, "Thomas", "Paillette", Category.SENIOR, competition.getCompetitionType());
+        competition.getClimbers().add(c1);
+        competition.getClimbers().add(c2);
+        competition.getClimbers().add(c3);        
     }
     
     @Test

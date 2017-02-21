@@ -35,14 +35,13 @@ public class SpeedRankingTest {
     
     @BeforeClass
     public static void init() {
-        SpeedRankingTest.competition = Competition.getInstance();
-        Competition.compType = Competition.CompetitionType.SPEED;
-        SpeedRankingTest.c1 = new Climber(0, "Hugo", "Da Roit", Category.SENIOR);
-        SpeedRankingTest.c2 = new Climber(1, "Pierre", "Laguette", Category.SENIOR);
-        SpeedRankingTest.c3 = new Climber(2, "Thomas", "Paillette", Category.SENIOR);
-        competition.addClimber(c1);
-        competition.addClimber(c2);
-        competition.addClimber(c3);        
+        SpeedRankingTest.competition = new Competition(Competition.CompetitionType.SPEED);
+        SpeedRankingTest.c1 = new Climber(0, "Hugo", "Da Roit", Category.SENIOR, competition.getCompetitionType());
+        SpeedRankingTest.c2 = new Climber(1, "Pierre", "Laguette", Category.SENIOR, competition.getCompetitionType());
+        SpeedRankingTest.c3 = new Climber(2, "Thomas", "Paillette", Category.SENIOR, competition.getCompetitionType());
+        competition.getClimbers().add(c1);
+        competition.getClimbers().add(c2);
+        competition.getClimbers().add(c3);        
     }
     
     @Test

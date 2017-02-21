@@ -16,9 +16,11 @@
 package climbingcompranking.model.climber;
 
 import climbingcompranking.model.Competition;
+import climbingcompranking.model.Competition.CompetitionType;
 import climbingcompranking.model.climber.score.BoulderingScore;
 import climbingcompranking.model.climber.score.LeadScore;
 import climbingcompranking.model.climber.score.SpeedScore;
+import climbingcompranking.model.ranking.Rank;
 
 /**
  *
@@ -32,6 +34,7 @@ public class Climber {
     private BoulderingScore boulderingScore;
     private final Category category;
     private boolean exaqueo;
+    private final Rank rank;
     
     /**
      * Create a climber without scores
@@ -39,15 +42,17 @@ public class Climber {
      * @param name
      * @param lastname
      * @param category
+     * @param compType
      */
-    public Climber(int id, String name, String lastname, Category category) {
+    public Climber(int id, String name, String lastname, Category category, CompetitionType compType) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.category = category;
         this.exaqueo = false;
+        this.rank = new Rank();
         
-        switch(Competition.compType) {
+        switch(compType) {
             case BOULDERING:
                 boulderingScore = new BoulderingScore();
                 break;
@@ -87,7 +92,7 @@ public class Climber {
      * @param boulderingScore
      * @param category
      */
-    private Climber(int id, String name, String lastname, LeadScore leadScore, SpeedScore speedScore, BoulderingScore boulderingScore, Category category, boolean exaqueo) {
+    private Climber(int id, String name, String lastname, LeadScore leadScore, SpeedScore speedScore, BoulderingScore boulderingScore, Category category, boolean exaqueo, Rank rank) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -96,6 +101,11 @@ public class Climber {
         this.boulderingScore = boulderingScore;
         this.category = category;
         this.exaqueo = exaqueo;
+        this.rank = rank;
+    }
+    
+    public Rank getRank() {
+        return rank;
     }
     
     @Override
@@ -113,7 +123,7 @@ public class Climber {
     
     @Override
     public Climber clone() throws CloneNotSupportedException {
-        return new Climber(id, name, lastname, leadScore, speedScore, boulderingScore, category, exaqueo);
+        return new Climber(id, name, lastname, leadScore, speedScore, boulderingScore, category, exaqueo, rank);
     }
 
     public LeadScore getLeadScore() {

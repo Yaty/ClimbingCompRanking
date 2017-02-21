@@ -38,14 +38,13 @@ public class SpeedLeadRankingTest {
     
     @BeforeClass
     public static void init() {
-        competition = Competition.getInstance();
-        Competition.compType = Competition.CompetitionType.SPEED_AND_LEAD;
-        c1 = new Climber(0, "Hugo", "Da Roit", Category.SENIOR);
-        c2 = new Climber(1, "Pierre", "Laguette", Category.SENIOR);
-        c3 = new Climber(2, "Thomas", "Paillette", Category.SENIOR);
-        competition.addClimber(c1);
-        competition.addClimber(c2);
-        competition.addClimber(c3);        
+        competition = new Competition(Competition.CompetitionType.SPEED_AND_LEAD);
+        c1 = new Climber(0, "Hugo", "Da Roit", Category.SENIOR, competition.getCompetitionType());
+        c2 = new Climber(1, "Pierre", "Laguette", Category.SENIOR, competition.getCompetitionType());
+        c3 = new Climber(2, "Thomas", "Paillette", Category.SENIOR, competition.getCompetitionType());
+        competition.getClimbers().add(c1);
+        competition.getClimbers().add(c2);
+        competition.getClimbers().add(c3);        
     }
     
     @Test

@@ -21,9 +21,6 @@ import climbingcompranking.model.climber.exceptions.InvalidScoreException;
 import climbingcompranking.model.ranking.RankType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -38,14 +35,13 @@ public class LeadBoulderingRankingTest {
     
     @BeforeClass
     public static void init() {
-        competition = Competition.getInstance();
-        Competition.compType = Competition.CompetitionType.LEAD_AND_BOULDERING;
-        c1 = new Climber(0, "Hugo", "Da Roit", Category.SENIOR);
-        c2 = new Climber(1, "Pierre", "Laguette", Category.SENIOR);
-        c3 = new Climber(2, "Thomas", "Paillette", Category.SENIOR);
-        competition.addClimber(c1);
-        competition.addClimber(c2);
-        competition.addClimber(c3);        
+        competition = new Competition(Competition.CompetitionType.LEAD_AND_BOULDERING);
+        c1 = new Climber(0, "Hugo", "Da Roit", Category.SENIOR, competition.getCompetitionType());
+        c2 = new Climber(1, "Pierre", "Laguette", Category.SENIOR, competition.getCompetitionType());
+        c3 = new Climber(2, "Thomas", "Paillette", Category.SENIOR, competition.getCompetitionType());
+        competition.getClimbers().add(c1);
+        competition.getClimbers().add(c2);
+        competition.getClimbers().add(c3);        
     }
     
     @Test
@@ -119,10 +115,10 @@ public class LeadBoulderingRankingTest {
             String[] wantedRanking =
             {
                 c1.getFullName() + " 1",
-                c2.getFullName() + " 2",
                 c3.getFullName() + " 2",
+                c2.getFullName() + " 2",
             };
-            
+           
             assertArrayEquals(wantedRanking, lines);        
         } catch (InvalidScoreException ex) {
             Logger.getLogger(LeadBoulderingRankingTest.class.getName()).log(Level.SEVERE, null, ex);

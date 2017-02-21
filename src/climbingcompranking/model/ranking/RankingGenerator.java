@@ -15,9 +15,8 @@
  */
 package climbingcompranking.model.ranking;
 
-import climbingcompranking.model.Competition;
+import climbingcompranking.model.Competition.CompetitionType;
 import climbingcompranking.model.climber.Climber;
-import climbingcompranking.model.climber.exceptions.CompetitionTypeUninitializedException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,353 +39,144 @@ public class RankingGenerator {
         }
     }
     
+    private void updateLeadScore() {
+        climbers.sort((Climber c1, Climber c2) -> {
+            int score = Float.compare(c1.getLeadScore().getFullScoreInFloat(), c2.getLeadScore().getFullScoreInFloat());
+            if(score == 0) {
+                c1.setExaqueo(true);
+                c2.setExaqueo(true);
+            }
+            return -score;
+        });
+
+        // Creating a ranking
+        int counter = 1, skip = 0;
+        for(Climber climber : climbers) {
+            if(climber.isExaqueo()) {
+                climber.getRank().setLeadRank(counter);
+                skip++;
+            } else {
+                climber.getRank().setLeadRank(counter++ + skip);
+                skip = 0;
+            }
+            climber.setExaqueo(false);
+        }
+    }
+    
+    private void updateSpeedScore() {
+        climbers.sort((Climber c1, Climber c2) -> {
+            int score = Float.compare(c1.getSpeedScore().getSpeed(), c2.getSpeedScore().getSpeed());
+             if(score == 0) {
+                c1.setExaqueo(true);
+                c2.setExaqueo(true);
+            }
+            return score;
+        });
+
+        // Creating a ranking
+        int counter = 1, skip = 0;
+        for(Climber climber : climbers) {
+            if(climber.isExaqueo()) {
+                climber.getRank().setSpeedRank(counter);
+                skip++;
+            } else {
+                climber.getRank().setSpeedRank(counter++ + skip);
+                skip = 0;
+            }
+            climber.setExaqueo(false);
+        }
+    }
+    
+    private void updateBoulderingScore() {
+        climbers.sort((Climber c1, Climber c2) -> {
+             // first we sort by the number of tops
+             int score = Integer.compare(c1.getBoulderingScore().getNumberOfTop(), c2.getBoulderingScore().getNumberOfTop());
+             if(score != 0) return -score;
+
+             // if it's equal we look a the number of tries to get those tops
+             score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToTop(), c2.getBoulderingScore().getNumberOfTryToTop());
+             if(score != 0) return score;
+
+             // if it's again equal we look at the number of bonus
+             score = Integer.compare(c1.getBoulderingScore().getNumberOfBonus(), c2.getBoulderingScore().getNumberOfBonus());
+             if(score != 0) return -score;
+
+             // and finally we compare the number of tries to get those bonus
+             score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToBonus(), c2.getBoulderingScore().getNumberOfTryToBonus());
+             if(score == 0) { // then those climbers are ex-aequo
+                 c1.setExaqueo(true);
+                 c2.setExaqueo(true);
+             }
+             return score;
+        });
+        
+         // Update the rank of the climbers
+        int counter = 1, skip = 0;
+        for(Climber climber : climbers) {
+            if(climber.isExaqueo()) {
+                climber.getRank().setBoulderingRank(counter);
+                skip++;
+            } else {
+                climber.getRank().setBoulderingRank(counter++ + skip);
+                skip = 0;
+            }
+            climber.setExaqueo(false);
+        }
+    }
+    
     // Beurk, refactor needed
-    private ArrayList<Rank> doTheRanking() {
-        ArrayList<Rank> ranks = new ArrayList<>();
-        int skip = 0, counter = 1;
+    private void doTheRanking(CompetitionType compType) {     
+        // First we have to reset rank exaequo values
+        // We will recalculate them after
+        for(Climber climber : climbers) {
+            climber.setExaqueo(false);
+            climber.getRank().setExaequo(false);
+        }
         
-        /*
-         -score -> the more you have the better it is
-         +score -> the less you have the better it is
-        */
-        
-        switch(Competition.compType) {
+        // Then we update scores
+        switch(compType) {
             case BOULDERING:
-                climbers.sort((Climber c1, Climber c2) -> {
-                    // first we sort by the number of tops
-                    int score = Integer.compare(c1.getBoulderingScore().getNumberOfTop(), c2.getBoulderingScore().getNumberOfTop());
-                    if(score != 0) return -score;
-                    
-                    // if it's equal we look a the number of tries to get those tops
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToTop(), c2.getBoulderingScore().getNumberOfTryToTop());
-                    if(score != 0) return score;
-                    
-                    // if it's again equal we look at the number of bonus
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfBonus(), c2.getBoulderingScore().getNumberOfBonus());
-                    if(score != 0) return -score;
-                    
-                    // and finally we compare the number of tries to get those bonus
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToBonus(), c2.getBoulderingScore().getNumberOfTryToBonus());
-                    if(score == 0) { // then those climbers are ex-aequo
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return score;
-                });
-                
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    if(climber.isExaqueo()) {
-                        ranks.add(new Rank(climber, 0, 0, counter));
-                        skip++;
-                    } else {
-                        ranks.add(new Rank(climber, 0, 0, counter++ + skip));
-                        skip = 0;
-                    }
-                }
-                
+                updateBoulderingScore();
                 break;
             case LEAD:
-                climbers.sort((Climber c1, Climber c2) -> {
-                    int score = Float.compare(c1.getLeadScore().getFullScoreInFloat(), c2.getLeadScore().getFullScoreInFloat());
-                    if(score == 0) {
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return -score;
-                });
-                
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    if(climber.isExaqueo()) {
-                        ranks.add(new Rank(climber, counter, 0, 0));
-                        skip++;
-                    } else {
-                        ranks.add(new Rank(climber, counter++ + skip, 0, 0));
-                        skip = 0;
-                    }
-                }
-                
+                updateLeadScore();
                 break;
             case SPEED:
-                climbers.sort((Climber c1, Climber c2) -> {
-                    int score = Float.compare(c1.getSpeedScore().getSpeed(), c2.getSpeedScore().getSpeed());
-                     if(score == 0) {
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return score;
-                });
-                
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    if(climber.isExaqueo()) {
-                        ranks.add(new Rank(climber, 0, counter, 0));
-                        skip++;
-                    } else {
-                        ranks.add(new Rank(climber, 0, counter++ + skip, 0));
-                        skip = 0;
-                    }
-                }
-                
+                updateSpeedScore();
                 break;
             case LEAD_AND_BOULDERING:
-                climbers.sort((Climber c1, Climber c2) -> {
-                    int score = Float.compare(c1.getLeadScore().getFullScoreInFloat(), c2.getLeadScore().getFullScoreInFloat());
-                    if(score == 0) {
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return -score;
-                });
-                
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    if(climber.isExaqueo()) {
-                        ranks.add(new Rank(climber, counter, 0, 0));
-                        skip++;
-                    } else {
-                        ranks.add(new Rank(climber, counter++ + skip, 0, 0));
-                        skip = 0;
-                    }
-                    climber.setExaqueo(false); // reset
-                }
-                
-                
-                climbers.sort((Climber c1, Climber c2) -> {
-                    // first we sort by the number of tops
-                    int score = Integer.compare(c1.getBoulderingScore().getNumberOfTop(), c2.getBoulderingScore().getNumberOfTop());
-                    if(score != 0) return -score;
-                    
-                    // if it's equal we look a the number of tries to get those tops
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToTop(), c2.getBoulderingScore().getNumberOfTryToTop());
-                    if(score != 0) return score;
-                    
-                    // if it's again equal we look at the number of bonus
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfBonus(), c2.getBoulderingScore().getNumberOfBonus());
-                    if(score != 0) return -score;
-                    
-                    // and finally we compare the number of tries to get those bonus
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToBonus(), c2.getBoulderingScore().getNumberOfTryToBonus());
-                    if(score == 0) { // then those climbers are ex-aequo
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return score;
-                });
-                counter = 1;
-                skip = 0;
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    Rank rank = getClimberRank(ranks, climber);
-                    if(climber.isExaqueo()) {
-                        rank.setBoulderingRank(counter);
-                        skip++;
-                    } else {
-                        rank.setBoulderingRank(counter++ + skip);
-                        skip = 0;
-                    }
-                }
-                
+                updateLeadScore();
+                updateBoulderingScore();
                 break;
             case SPEED_AND_BOULDERING:
-                climbers.sort((Climber c1, Climber c2) -> {
-                    int score = Float.compare(c1.getSpeedScore().getSpeed(), c2.getSpeedScore().getSpeed());
-                     if(score == 0) {
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return score;
-                });
-                
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    if(climber.isExaqueo()) {
-                        ranks.add(new Rank(climber, 0, counter, 0));
-                        skip++;
-                    } else {
-                        ranks.add(new Rank(climber, 0, counter++ + skip, 0));
-                        skip = 0;
-                    }
-                    climber.setExaqueo(false); // reset for bouldering
-                }
-
-                climbers.sort((Climber c1, Climber c2) -> {
-                    // first we sort by the number of tops
-                    int score = Integer.compare(c1.getBoulderingScore().getNumberOfTop(), c2.getBoulderingScore().getNumberOfTop());
-                    if(score != 0) return -score;
-                    
-                    // if it's equal we look a the number of tries to get those tops
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToTop(), c2.getBoulderingScore().getNumberOfTryToTop());
-                    if(score != 0) return score;
-                    
-                    // if it's again equal we look at the number of bonus
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfBonus(), c2.getBoulderingScore().getNumberOfBonus());
-                    if(score != 0) return -score;
-                    
-                    // and finally we compare the number of tries to get those bonus
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToBonus(), c2.getBoulderingScore().getNumberOfTryToBonus());
-                    if(score == 0) { // then those climbers are ex-aequo
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return score;
-                });
-                counter = 1;
-                skip = 0;
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    Rank rank = getClimberRank(ranks, climber);
-                    if(climber.isExaqueo()) {
-                        rank.setBoulderingRank(counter);
-                        skip++;
-                    } else {
-                        rank.setBoulderingRank(counter++ + skip);
-                        skip = 0;
-                    }
-                }
+                updateSpeedScore();
+                updateBoulderingScore();
                 break;
             case SPEED_AND_LEAD:
-                climbers.sort((Climber c1, Climber c2) -> {
-                    int score = Float.compare(c1.getSpeedScore().getSpeed(), c2.getSpeedScore().getSpeed());
-                     if(score == 0) {
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return score;
-                });
-                
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    if(climber.isExaqueo()) {
-                        ranks.add(new Rank(climber, 0, counter, 0));
-                        skip++;
-                    } else {
-                        ranks.add(new Rank(climber, 0, counter++ + skip, 0));
-                        skip = 0;
-                    }
-                    climber.setExaqueo(false); // reset for bouldering
-                }
-                
-                climbers.sort((Climber c1, Climber c2) -> {
-                    int score = Float.compare(c1.getLeadScore().getFullScoreInFloat(), c2.getLeadScore().getFullScoreInFloat());
-                    if(score == 0) {
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return -score;
-                });
-                counter = 1;
-                skip = 0;
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    Rank rank = getClimberRank(ranks, climber);
-                    if(climber.isExaqueo()) {
-                        rank.setLeadRank(counter);
-                        skip++;
-                    } else {
-                        rank.setLeadRank(counter++ + skip);
-                        skip = 0;
-                    }
-                }
+                updateSpeedScore();
+                updateLeadScore();
                 break;
             case COMBINED:
-                climbers.sort((Climber c1, Climber c2) -> {
-                    int score = Float.compare(c1.getSpeedScore().getSpeed(), c2.getSpeedScore().getSpeed());
-                     if(score == 0) {
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return score;
-                });
-                
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    if(climber.isExaqueo()) {
-                        ranks.add(new Rank(climber, 0, counter, 0));
-                        skip++;
-                    } else {
-                        ranks.add(new Rank(climber, 0, counter++ + skip, 0));
-                        skip = 0;
-                    }
-                    climber.setExaqueo(false); // reset for bouldering
-                }
-                
-                climbers.sort((Climber c1, Climber c2) -> {
-                    int score = Float.compare(c1.getLeadScore().getFullScoreInFloat(), c2.getLeadScore().getFullScoreInFloat());
-                    if(score == 0) {
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return -score;
-                });
-                counter = 1;
-                skip = 0;
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    Rank rank = getClimberRank(ranks, climber);
-                    if(climber.isExaqueo()) {
-                        rank.setLeadRank(counter);
-                        skip++;
-                    } else {
-                        rank.setLeadRank(counter++ + skip);
-                        skip = 0;
-                    }
-                }
-                climbers.sort((Climber c1, Climber c2) -> {
-                    // first we sort by the number of tops
-                    int score = Integer.compare(c1.getBoulderingScore().getNumberOfTop(), c2.getBoulderingScore().getNumberOfTop());
-                    if(score != 0) return -score;
-                    
-                    // if it's equal we look a the number of tries to get those tops
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToTop(), c2.getBoulderingScore().getNumberOfTryToTop());
-                    if(score != 0) return score;
-                    
-                    // if it's again equal we look at the number of bonus
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfBonus(), c2.getBoulderingScore().getNumberOfBonus());
-                    if(score != 0) return -score;
-                    
-                    // and finally we compare the number of tries to get those bonus
-                    score = Integer.compare(c1.getBoulderingScore().getNumberOfTryToBonus(), c2.getBoulderingScore().getNumberOfTryToBonus());
-                    if(score == 0) { // then those climbers are ex-aequo
-                        c1.setExaqueo(true);
-                        c2.setExaqueo(true);
-                    }
-                    return score;
-                });
-                counter = 1;
-                skip = 0;
-                // Creating a ranking
-                for(Climber climber : climbers) {
-                    Rank rank = getClimberRank(ranks, climber);
-                    if(climber.isExaqueo()) {
-                        rank.setBoulderingRank(counter);
-                        skip++;
-                    } else {
-                        rank.setBoulderingRank(counter++ + skip);
-                        skip = 0;
-                    }
-                }
+                updateBoulderingScore();
+                updateLeadScore();
+                updateSpeedScore();
                 break;
         }
         
-        ranks.sort((Rank r1, Rank r2) -> {
-            try {
-                int score = Integer.compare(r1.getTotalPoints(), r2.getTotalPoints());
-                if(score == 0) {
-                    r1.setExaequo(true);
-                    r2.setExaequo(true);
-                }
-                return score;
-            } catch (CompetitionTypeUninitializedException ex) {
-                Logger.getLogger(RankingGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        // Sorting the climbers list with the total points
+        climbers.sort((Climber c1, Climber c2) -> {
+            int score = Integer.compare(c1.getRank().getTotalPoints(compType), c2.getRank().getTotalPoints(compType));
+            if(score == 0) {
+                c1.getRank().setExaequo(true);
+                c2.getRank().setExaequo(true);
             }
-            return 0;
+            return score;
         });
         
-        counter = 1;
-        skip = 0;
-        for(Rank rank : ranks) {
+        // And finally update the overall ranking of each climber
+        int skip = 0, counter = 1;
+        for(int i = 0 ; i < climbers.size() ; i++) {
+            Rank rank = climbers.get(i).getRank();
             if(rank.isExaequo()) {
                 rank.setOverallRank(counter);
                 skip++;
@@ -395,25 +185,14 @@ public class RankingGenerator {
                 skip = 0;
             }
         }
-        
-        return ranks;
     }
 
-    public String getRankingInString() {
+    public String getRankingInString(CompetitionType compType) {
         StringBuilder str = new StringBuilder();
-        ArrayList<Rank> ranks = doTheRanking();
-        for(Rank rank : ranks)
-            str.append(rank.getClimberFullName()).append(' ').append(rank.getOverallRank()).append("\n");
+        doTheRanking(compType);
+        for(Climber climber : climbers)
+            str.append(climber.getFullName()).append(' ').append(climber.getRank().getOverallRank()).append("\n");
         return str.toString();
     }
-
-    private Rank getClimberRank(ArrayList<Rank> ranks, Climber climber) {
-        for(Rank rank : ranks) {
-            if(rank.getClimber().equals(climber))
-                return rank;
-        }
-        return null;
-    }
-
     
 }

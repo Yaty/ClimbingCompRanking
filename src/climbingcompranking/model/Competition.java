@@ -26,34 +26,28 @@ import java.util.ArrayList;
  */
 public class Competition {
     private String name;
-    private ArrayList<Climber> climbers;
+    private final ArrayList<Climber> climbers;
     public enum CompetitionType {SPEED, LEAD, BOULDERING, SPEED_AND_LEAD, SPEED_AND_BOULDERING, LEAD_AND_BOULDERING, COMBINED};
-    public static CompetitionType compType;
+    private final CompetitionType compType;
     
-    /* Singleton pattern */
-    private Competition() {
+    public Competition(CompetitionType compType) {
+        this.compType = compType;
         climbers = new ArrayList<>();
     }
-    private static Competition INSTANCE;
-    public static synchronized Competition getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new Competition();
-        return INSTANCE;
+    
+    public CompetitionType getCompetitionType() {
+        return compType;
     }
     
-    public void addClimber(Climber climber) {
-        climbers.add(climber);
-    }
-    
-    public void removeClimber(Climber climber) {
-        climbers.remove(climber);
+    public ArrayList<Climber> getClimbers() {
+        return climbers;
     }
     
     public String rank(RankType rankType) {
         switch(rankType) {
             case TEXT:
                 RankingGenerator generator = new RankingGenerator(climbers);
-                return generator.getRankingInString();
+                return generator.getRankingInString(compType);
             case PDF:
                 throw new UnsupportedOperationException("Not supported yet.");
             case JPG:

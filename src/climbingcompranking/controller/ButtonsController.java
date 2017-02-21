@@ -16,10 +16,7 @@
 package climbingcompranking.controller;
 
 import climbingcompranking.model.Competition;
-import climbingcompranking.model.Rank;
-import climbingcompranking.model.climber.Climber;
 import climbingcompranking.model.ranking.RankType;
-import java.util.HashMap;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
