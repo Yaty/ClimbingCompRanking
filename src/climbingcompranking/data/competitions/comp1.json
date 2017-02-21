@@ -1,0 +1,19 @@
+{
+	"name": "comp1",
+	"climbers": [
+		{
+			"name": "Michel",
+			"lastname": "Dupont"
+		},
+		{
+			"name": "Jacky",
+			"lastname": "Marie"
+		}
+	],
+	"compType": "LEAD",
+	"events": [
+		{
+			"name": "test"
+		}
+	]
+}
