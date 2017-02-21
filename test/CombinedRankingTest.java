@@ -1,24 +1,28 @@
-/*
- * Copyright 2017 Hugo Da Roit - contact@hdaroit.fr.
+/* 
+ * Copyright (C) 2017
+ * Mail : Hugo Da Roit - contact@hdaroit.fr
+ * GitHub : https://github.com/Yaty
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import climbingcompranking.model.Competition;
 import climbingcompranking.model.climber.Category;
 import climbingcompranking.model.climber.Climber;
 import climbingcompranking.model.climber.exceptions.InvalidScoreException;
 import climbingcompranking.model.ranking.RankType;
+import climbingcompranking.utils.I18n;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.BeforeClass;
@@ -36,12 +40,14 @@ public class CombinedRankingTest {
     @BeforeClass
     public static void init() {
         competition = new Competition(Competition.CompetitionType.COMBINED);
-        c1 = new Climber(0, "Hugo", "Da Roit", Category.SENIOR, competition.getCompetitionType());
-        c2 = new Climber(1, "Pierre", "Laguette", Category.SENIOR, competition.getCompetitionType());
-        c3 = new Climber(2, "Thomas", "Paillette", Category.SENIOR, competition.getCompetitionType());
-        competition.getClimbers().add(c1);
-        competition.getClimbers().add(c2);
-        competition.getClimbers().add(c3); 
+        c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType());
+        c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType());
+        c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType());
+        ArrayList<Climber> climbers = new ArrayList<>();
+        climbers.add(c1);
+        climbers.add(c2);
+        climbers.add(c3);
+        competition.getClimbers().put(Category.SENIOR, climbers);
     }
     
     @Test
@@ -64,6 +70,7 @@ public class CombinedRankingTest {
 
             String[] wantedRanking =
             {
+                I18n.MODEL.getString("Senior"),
                 c1.getFullName() + " 1",
                 c2.getFullName() + " 2",
                 c3.getFullName() + " 3",
@@ -95,6 +102,7 @@ public class CombinedRankingTest {
 
             String[] wantedRanking =
             {
+                I18n.MODEL.getString("Senior"),
                 c1.getFullName() + " 1",
                 c2.getFullName() + " 1",
                 c3.getFullName() + " 3",

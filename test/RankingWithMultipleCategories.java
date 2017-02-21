@@ -30,69 +30,86 @@ import static org.junit.Assert.*;
  *
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
-public class SpeedLeadRankingTest {
+public class RankingWithMultipleCategories {
     private static Competition competition;
-    private static Climber c1, c2, c3;
+    private static Climber c1, c2, c3, c4, c5, c6;
     
     @BeforeClass
     public static void init() {
-        competition = new Competition(Competition.CompetitionType.SPEED_AND_LEAD);
+        competition = new Competition(Competition.CompetitionType.LEAD);
         c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType());
         c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType());
         c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType());
-        ArrayList<Climber> climbers = new ArrayList<>();
-        climbers.add(c1);
-        climbers.add(c2);
-        climbers.add(c3);
-        competition.getClimbers().put(Category.SENIOR, climbers);     
+        c4 = new Climber(3, "d", "d", Category.VETERAN, competition.getCompetitionType());
+        c5 = new Climber(4, "e", "e", Category.VETERAN, competition.getCompetitionType());
+        c6 = new Climber(5, "f", "f", Category.VETERAN, competition.getCompetitionType());
+        ArrayList<Climber> seniorClimbers = new ArrayList<>();
+        seniorClimbers.add(c1);
+        seniorClimbers.add(c2);
+        seniorClimbers.add(c3);
+        
+        ArrayList<Climber> vetClimbers = new ArrayList<>();
+        vetClimbers.add(c4);
+        vetClimbers.add(c5);
+        vetClimbers.add(c6);
+        
+        competition.getClimbers().put(Category.SENIOR, seniorClimbers);  
+        competition.getClimbers().put(Category.VETERAN, vetClimbers);
     }
     
     @Test
     public void simpleTest() {
-        c1.getLeadScore().setFullScore(50, true); // 1
-        c2.getLeadScore().setFullScore(40, true); // 2
-        c3.getLeadScore().setFullScore(30, true); // 3
-
-        c1.getSpeedScore().setSpeed(10); // 1 -> 2
-        c2.getSpeedScore().setSpeed(11); // 2 -> 4
-        c3.getSpeedScore().setSpeed(12); // 3 -> 6
-
+        c1.getLeadScore().setFullScore(10, false);
+        c2.getLeadScore().setFullScore(9, false);
+        c3.getLeadScore().setFullScore(8, false);
+        
+        c4.getLeadScore().setFullScore(10, false);
+        c5.getLeadScore().setFullScore(9, false);
+        c6.getLeadScore().setFullScore(8, false);
+        
         String ranking = competition.rank(RankType.TEXT);
         String[] lines = ranking.split("\n");
-
+        
         String[] wantedRanking =
         {
             I18n.MODEL.getString("Senior"),
             c1.getFullName() + " 1",
             c2.getFullName() + " 2",
             c3.getFullName() + " 3",
+            I18n.MODEL.getString("Veteran"),
+            c4.getFullName() + " 1",
+            c5.getFullName() + " 2",
+            c6.getFullName() + " 3",
         };
 
-        assertArrayEquals(wantedRanking, lines);
+        assertArrayEquals(wantedRanking, lines);        
     }
-
+    
     @Test
-    public void exAequoTest() {
-        c1.getLeadScore().setFullScore(50, true); // 1
-        c2.getLeadScore().setFullScore(50, true); // 1
-        c3.getLeadScore().setFullScore(30, true); // 3
-
-        c1.getSpeedScore().setSpeed(10); // 1 -> 2
-        c2.getSpeedScore().setSpeed(10); // 1 -> 2
-        c3.getSpeedScore().setSpeed(12); // 3 -> 6
-
+    public void exaequoTest1() {
+        c1.getLeadScore().setFullScore(10, false);
+        c2.getLeadScore().setFullScore(10, false);
+        c3.getLeadScore().setFullScore(8, false);
+        
+        c4.getLeadScore().setFullScore(10, false);
+        c5.getLeadScore().setFullScore(10, false);
+        c6.getLeadScore().setFullScore(8, false);
+        
         String ranking = competition.rank(RankType.TEXT);
         String[] lines = ranking.split("\n");
-
+        
         String[] wantedRanking =
         {
             I18n.MODEL.getString("Senior"),
             c1.getFullName() + " 1",
             c2.getFullName() + " 1",
             c3.getFullName() + " 3",
+            I18n.MODEL.getString("Veteran"),
+            c4.getFullName() + " 1",
+            c5.getFullName() + " 1",
+            c6.getFullName() + " 3",
         };
 
-        assertArrayEquals(wantedRanking, lines);
-    }    
-    
+        assertArrayEquals(wantedRanking, lines);          
+    }
 }
