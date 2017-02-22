@@ -37,14 +37,14 @@ public class LeadRankingTest {
     @BeforeClass
     public static void init() {
         LeadRankingTest.competition = new Competition(Competition.CompetitionType.LEAD, "comp1");
-        LeadRankingTest.c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType(), "cpao");
-        LeadRankingTest.c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType(), "cpao");
-        LeadRankingTest.c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        LeadRankingTest.c1 = new Climber(0, "a", "a", Category.SENIOR_MALE, competition.getCompetitionType(), "cpao");
+        LeadRankingTest.c2 = new Climber(1, "b", "b", Category.SENIOR_MALE, competition.getCompetitionType(), "cpao");
+        LeadRankingTest.c3 = new Climber(2, "c", "c", Category.SENIOR_MALE, competition.getCompetitionType(), "cpao");
         ArrayList<Climber> climbers = new ArrayList<>();
         climbers.add(c1);
         climbers.add(c2);
         climbers.add(c3);
-        competition.getClimbers().put(Category.SENIOR, climbers);       
+        competition.getClimbers().put(Category.SENIOR_MALE, climbers);       
     }
     
     @Test
@@ -58,7 +58,7 @@ public class LeadRankingTest {
 
         String[] wantedRanking =
         {
-            I18n.MODEL.getString("Senior"),
+            I18n.MODEL.getString("SeniorM"),
             c1.getFullName() + " 1",
             c2.getFullName() + " 2",
             c3.getFullName() + " 3",
@@ -78,7 +78,7 @@ public class LeadRankingTest {
 
         String[] wantedRanking =
         {
-            I18n.MODEL.getString("Senior"),
+            I18n.MODEL.getString("SeniorM"),
             c1.getFullName() + " 1",
             c2.getFullName() + " 1",
             c3.getFullName() + " 3",

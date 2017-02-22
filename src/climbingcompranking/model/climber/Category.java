@@ -25,15 +25,24 @@ import climbingcompranking.utils.I18n;
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
 public enum Category {
-    VETERAN(I18n.MODEL.getString("Veteran")),
-    SENIOR(I18n.MODEL.getString("Senior")),
-    JUNIOR(I18n.MODEL.getString("Junior")),
-    YOUTHA(I18n.MODEL.getString("YouthA")), // Cadet
-    YOUTHB(I18n.MODEL.getString("YouthB")), // Minime
-    YOUTHC(I18n.MODEL.getString("YouthC")), // Benjamin
-    YOUTHD(I18n.MODEL.getString("YouthD")), // Poussin
-    YOUTHE(I18n.MODEL.getString("YouthE")), // Microbe
-    YOUTHF(I18n.MODEL.getString("YouthF")); // Moustique
+    VETERAN_MALE(I18n.MODEL.getString("VeteranM")),
+    VETERAN_FEMALE(I18n.MODEL.getString("VeteranF")),
+    SENIOR_MALE(I18n.MODEL.getString("SeniorM")),
+    SENIOR_FEMALE(I18n.MODEL.getString("SeniorF")),
+    JUNIOR_MALE(I18n.MODEL.getString("JuniorM")),
+    JUNIOR_FEMALE(I18n.MODEL.getString("JuniorF")),
+    YOUTHA_MALE(I18n.MODEL.getString("YouthAM")), // Cadet
+    YOUTHA_FEMALE(I18n.MODEL.getString("YouthAF")), // Cadet
+    YOUTHB_MALE(I18n.MODEL.getString("YouthBM")), // Minime
+    YOUTHB_FEMALE(I18n.MODEL.getString("YouthBF")), // Minime
+    YOUTHC_MALE(I18n.MODEL.getString("YouthCM")), // Benjamin
+    YOUTHC_FEMALE(I18n.MODEL.getString("YouthCF")), // Benjamin
+    YOUTHD_MALE(I18n.MODEL.getString("YouthDM")), // Poussin
+    YOUTHD_FEMALE(I18n.MODEL.getString("YouthDF")), // Poussin
+    YOUTHE_MALE(I18n.MODEL.getString("YouthEM")), // Microbe
+    YOUTHE_FEMALE(I18n.MODEL.getString("YouthEF")), // Microbe
+    YOUTHF_MALE(I18n.MODEL.getString("YouthFM")),  // Moustique
+    YOUTHF_FEMALE(I18n.MODEL.getString("YouthFF")); // Moustique
     
     private final String name;
     

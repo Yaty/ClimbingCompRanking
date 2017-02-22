@@ -37,12 +37,12 @@ public class RankingWithMultipleCategories {
     @BeforeClass
     public static void init() {
         competition = new Competition(Competition.CompetitionType.LEAD, "comp1");
-        c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType(), "cpao");
-        c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType(), "cpao");
-        c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType(), "cpao");
-        c4 = new Climber(3, "d", "d", Category.VETERAN, competition.getCompetitionType(), "cpao");
-        c5 = new Climber(4, "e", "e", Category.VETERAN, competition.getCompetitionType(), "cpao");
-        c6 = new Climber(5, "f", "f", Category.VETERAN, competition.getCompetitionType(), "cpao");
+        c1 = new Climber(0, "a", "a", Category.SENIOR_MALE, competition.getCompetitionType(), "cpao");
+        c2 = new Climber(1, "b", "b", Category.SENIOR_MALE, competition.getCompetitionType(), "cpao");
+        c3 = new Climber(2, "c", "c", Category.SENIOR_MALE, competition.getCompetitionType(), "cpao");
+        c4 = new Climber(3, "d", "d", Category.VETERAN_MALE, competition.getCompetitionType(), "cpao");
+        c5 = new Climber(4, "e", "e", Category.VETERAN_MALE, competition.getCompetitionType(), "cpao");
+        c6 = new Climber(5, "f", "f", Category.VETERAN_MALE, competition.getCompetitionType(), "cpao");
         ArrayList<Climber> seniorClimbers = new ArrayList<>();
         seniorClimbers.add(c1);
         seniorClimbers.add(c2);
@@ -53,8 +53,8 @@ public class RankingWithMultipleCategories {
         vetClimbers.add(c5);
         vetClimbers.add(c6);
         
-        competition.getClimbers().put(Category.SENIOR, seniorClimbers);  
-        competition.getClimbers().put(Category.VETERAN, vetClimbers);
+        competition.getClimbers().put(Category.SENIOR_MALE, seniorClimbers);  
+        competition.getClimbers().put(Category.VETERAN_MALE, vetClimbers);
     }
     
     @Test
@@ -72,14 +72,14 @@ public class RankingWithMultipleCategories {
         
         String[] wantedRanking =
         {
-            I18n.MODEL.getString("Senior"),
-            c1.getFullName() + " 1",
-            c2.getFullName() + " 2",
-            c3.getFullName() + " 3",
-            I18n.MODEL.getString("Veteran"),
+            I18n.MODEL.getString("VeteranM"),
             c4.getFullName() + " 1",
             c5.getFullName() + " 2",
             c6.getFullName() + " 3",
+            I18n.MODEL.getString("SeniorM"),
+            c1.getFullName() + " 1",
+            c2.getFullName() + " 2",
+            c3.getFullName() + " 3"
         };
 
         assertArrayEquals(wantedRanking, lines);        
@@ -100,14 +100,14 @@ public class RankingWithMultipleCategories {
         
         String[] wantedRanking =
         {
-            I18n.MODEL.getString("Senior"),
-            c1.getFullName() + " 1",
-            c2.getFullName() + " 1",
-            c3.getFullName() + " 3",
-            I18n.MODEL.getString("Veteran"),
+            I18n.MODEL.getString("VeteranM"),
             c4.getFullName() + " 1",
             c5.getFullName() + " 1",
             c6.getFullName() + " 3",
+            I18n.MODEL.getString("SeniorM"),
+            c1.getFullName() + " 1",
+            c2.getFullName() + " 1",
+            c3.getFullName() + " 3"
         };
 
         assertArrayEquals(wantedRanking, lines);          

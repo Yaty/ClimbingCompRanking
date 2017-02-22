@@ -40,9 +40,9 @@ public class PDFTest {
     public static void init() {
         try {
             competition = new Competition(Competition.CompetitionType.LEAD_AND_BOULDERING, "COMP1");
-            c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType(), "cpao");
-            c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType(), "cpao");
-            c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType(), "cpao");
+            c1 = new Climber(0, "a", "a", Category.SENIOR_MALE, competition.getCompetitionType(), "cpao");
+            c2 = new Climber(1, "b", "b", Category.SENIOR_MALE, competition.getCompetitionType(), "cpao");
+            c3 = new Climber(2, "c", "c", Category.SENIOR_MALE, competition.getCompetitionType(), "cpao");
             c1.getLeadScore().setFullScore(10, true);
             c2.getLeadScore().setFullScore(10, true);
             c3.getLeadScore().setFullScore(5, true);
@@ -53,11 +53,11 @@ public class PDFTest {
             seniors.add(c1);
             seniors.add(c2);
             seniors.add(c3);
-            competition.getClimbers().put(Category.SENIOR, seniors);
+            competition.getClimbers().put(Category.SENIOR_MALE, seniors);
             
-            c4 = new Climber(3, "d", "d", Category.VETERAN, competition.getCompetitionType(), "cpao");
-            c5 = new Climber(4, "e", "e", Category.VETERAN, competition.getCompetitionType(), "cpao");
-            c6 = new Climber(5, "f", "f", Category.VETERAN, competition.getCompetitionType(), "cpao");
+            c4 = new Climber(3, "d", "d", Category.VETERAN_MALE, competition.getCompetitionType(), "cpao");
+            c5 = new Climber(4, "e", "e", Category.VETERAN_MALE, competition.getCompetitionType(), "cpao");
+            c6 = new Climber(5, "f", "f", Category.VETERAN_MALE, competition.getCompetitionType(), "cpao");
             c4.getLeadScore().setFullScore(10, true);
             c5.getLeadScore().setFullScore(8, true);
             c6.getLeadScore().setFullScore(7, true);
@@ -68,7 +68,7 @@ public class PDFTest {
             veterans.add(c4);
             veterans.add(c5);
             veterans.add(c6);      
-            competition.getClimbers().put(Category.VETERAN, veterans);
+            competition.getClimbers().put(Category.VETERAN_MALE, veterans);
         } catch (InvalidScoreException ex) {
             Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -78,5 +78,7 @@ public class PDFTest {
     @Test
     public void generatePDF() {
         competition.rank(RankType.PDF);
+        // We shall read the PDF to be sure everything is in place
+        // For now see the pdf with your eye :)
     }
 }
