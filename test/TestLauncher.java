@@ -33,7 +33,8 @@ import org.junit.runners.Suite;
         SpeedRankingTest.class,
         CombinedRankingTest.class,
         LeadRankingTest.class,
-        RankingWithMultipleCategories.class
+        RankingWithMultipleCategories.class,
+        PDFTest.class
     }
 )
 public class TestLauncher {}

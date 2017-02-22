@@ -36,13 +36,13 @@ public class RankingWithMultipleCategories {
     
     @BeforeClass
     public static void init() {
-        competition = new Competition(Competition.CompetitionType.LEAD);
-        c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType());
-        c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType());
-        c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType());
-        c4 = new Climber(3, "d", "d", Category.VETERAN, competition.getCompetitionType());
-        c5 = new Climber(4, "e", "e", Category.VETERAN, competition.getCompetitionType());
-        c6 = new Climber(5, "f", "f", Category.VETERAN, competition.getCompetitionType());
+        competition = new Competition(Competition.CompetitionType.LEAD, "comp1");
+        c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        c4 = new Climber(3, "d", "d", Category.VETERAN, competition.getCompetitionType(), "cpao");
+        c5 = new Climber(4, "e", "e", Category.VETERAN, competition.getCompetitionType(), "cpao");
+        c6 = new Climber(5, "f", "f", Category.VETERAN, competition.getCompetitionType(), "cpao");
         ArrayList<Climber> seniorClimbers = new ArrayList<>();
         seniorClimbers.add(c1);
         seniorClimbers.add(c2);

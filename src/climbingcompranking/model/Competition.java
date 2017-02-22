@@ -35,9 +35,10 @@ public class Competition {
     public enum CompetitionType {SPEED, LEAD, BOULDERING, SPEED_AND_LEAD, SPEED_AND_BOULDERING, LEAD_AND_BOULDERING, COMBINED};
     private final CompetitionType compType;
     
-    public Competition(CompetitionType compType) {
+    public Competition(CompetitionType compType, String name) {
         this.compType = compType;
         climbers = new HashMap<>();
+        this.name = name;
     }
     
     public CompetitionType getCompetitionType() {
@@ -49,12 +50,13 @@ public class Competition {
     }
     
     public String rank(RankType rankType) {
+        RankingGenerator generator = new RankingGenerator(climbers);
         switch(rankType) {
             case TEXT:
-                RankingGenerator generator = new RankingGenerator(climbers);
                 return generator.getRankingInString(compType);
             case PDF:
-                throw new UnsupportedOperationException("Not supported yet.");
+                generator.createRankingPDF(name, compType);
+                return "PDF Created";
             case JPG:
                 throw new UnsupportedOperationException("Not supported yet.");
             default:

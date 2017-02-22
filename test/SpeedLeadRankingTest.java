@@ -36,10 +36,10 @@ public class SpeedLeadRankingTest {
     
     @BeforeClass
     public static void init() {
-        competition = new Competition(Competition.CompetitionType.SPEED_AND_LEAD);
-        c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType());
-        c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType());
-        c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType());
+        competition = new Competition(Competition.CompetitionType.SPEED_AND_LEAD, "comp1");
+        c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType(), "cpao");
         ArrayList<Climber> climbers = new ArrayList<>();
         climbers.add(c1);
         climbers.add(c2);

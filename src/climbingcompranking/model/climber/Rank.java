@@ -16,10 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package climbingcompranking.model.ranking;
+package climbingcompranking.model.climber;
 
 import climbingcompranking.model.Competition.CompetitionType;
-import climbingcompranking.model.climber.Climber;
 
 /**
  *
@@ -39,6 +38,7 @@ public class Rank {
         this.leadRank = leadRank;
         this.speedRank = speedRank;
         this.boulderingRank = boulderingRank;
+        this.exaequo = false;
     }
 
     public int getLeadRank() {

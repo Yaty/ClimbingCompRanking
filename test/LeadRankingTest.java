@@ -36,10 +36,10 @@ public class LeadRankingTest {
     
     @BeforeClass
     public static void init() {
-        LeadRankingTest.competition = new Competition(Competition.CompetitionType.LEAD);
-        LeadRankingTest.c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType());
-        LeadRankingTest.c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType());
-        LeadRankingTest.c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType());
+        LeadRankingTest.competition = new Competition(Competition.CompetitionType.LEAD, "comp1");
+        LeadRankingTest.c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        LeadRankingTest.c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        LeadRankingTest.c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType(), "cpao");
         ArrayList<Climber> climbers = new ArrayList<>();
         climbers.add(c1);
         climbers.add(c2);

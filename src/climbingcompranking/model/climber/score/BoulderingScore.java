@@ -18,7 +18,7 @@
  */
 package climbingcompranking.model.climber.score;
 
-import climbingcompranking.model.climber.exceptions.InvalidScoreException;
+import climbingcompranking.utils.exceptions.InvalidScoreException;
 
 /**
  *

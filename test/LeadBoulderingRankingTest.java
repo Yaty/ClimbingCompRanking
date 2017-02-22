@@ -19,7 +19,7 @@
 import climbingcompranking.model.Competition;
 import climbingcompranking.model.climber.Category;
 import climbingcompranking.model.climber.Climber;
-import climbingcompranking.model.climber.exceptions.InvalidScoreException;
+import climbingcompranking.utils.exceptions.InvalidScoreException;
 import climbingcompranking.model.ranking.RankType;
 import climbingcompranking.utils.I18n;
 import java.util.ArrayList;
@@ -39,10 +39,10 @@ public class LeadBoulderingRankingTest {
     
     @BeforeClass
     public static void init() {
-        competition = new Competition(Competition.CompetitionType.LEAD_AND_BOULDERING);
-        c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType());
-        c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType());
-        c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType());
+        competition = new Competition(Competition.CompetitionType.LEAD_AND_BOULDERING, "comp1");
+        c1 = new Climber(0, "a", "a", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        c2 = new Climber(1, "b", "b", Category.SENIOR, competition.getCompetitionType(), "cpao");
+        c3 = new Climber(2, "c", "c", Category.SENIOR, competition.getCompetitionType(), "cpao");
         ArrayList<Climber> climbers = new ArrayList<>();
         climbers.add(c1);
         climbers.add(c2);

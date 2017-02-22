@@ -18,12 +18,10 @@
  */
 package climbingcompranking.model.climber;
 
-import climbingcompranking.model.Competition;
 import climbingcompranking.model.Competition.CompetitionType;
 import climbingcompranking.model.climber.score.BoulderingScore;
 import climbingcompranking.model.climber.score.LeadScore;
 import climbingcompranking.model.climber.score.SpeedScore;
-import climbingcompranking.model.ranking.Rank;
 
 /**
  *
@@ -36,7 +34,7 @@ public class Climber {
     private SpeedScore speedScore;
     private BoulderingScore boulderingScore;
     private final Category category;
-    private boolean exaqueo;
+    private final String clubName;
     private final Rank rank;
     
     /**
@@ -47,13 +45,13 @@ public class Climber {
      * @param category
      * @param compType
      */
-    public Climber(int id, String name, String lastname, Category category, CompetitionType compType) {
+    public Climber(int id, String name, String lastname, Category category, CompetitionType compType, String clubName) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.category = category;
-        this.exaqueo = false;
         this.rank = new Rank();
+        this.clubName = clubName;
         
         switch(compType) {
             case BOULDERING:
@@ -84,31 +82,13 @@ public class Climber {
                 break;
         }
     }
-
-    /**
-     * Used by clone()
-     * @param id
-     * @param name
-     * @param lastname
-     * @param leadScore
-     * @param speedScore
-     * @param boulderingScore
-     * @param category
-     */
-    private Climber(int id, String name, String lastname, LeadScore leadScore, SpeedScore speedScore, BoulderingScore boulderingScore, Category category, boolean exaqueo, Rank rank) {
-        this.id = id;
-        this.name = name;
-        this.lastname = lastname;
-        this.leadScore = leadScore;
-        this.speedScore = speedScore;
-        this.boulderingScore = boulderingScore;
-        this.category = category;
-        this.exaqueo = exaqueo;
-        this.rank = rank;
-    }
     
     public Rank getRank() {
         return rank;
+    }
+    
+    public String getClubName() {
+        return clubName;
     }
     
     @Override
@@ -123,11 +103,6 @@ public class Climber {
     public String getFullName() {
         return lastname + ' ' + name;
     }
-    
-    @Override
-    public Climber clone() throws CloneNotSupportedException {
-        return new Climber(id, name, lastname, leadScore, speedScore, boulderingScore, category, exaqueo, rank);
-    }
 
     public LeadScore getLeadScore() {
         return leadScore;
@@ -139,21 +114,6 @@ public class Climber {
 
     public BoulderingScore getBoulderingScore() {
         return boulderingScore;
-    }
-
-    public boolean isExaqueo() {
-        return exaqueo;
-    }
-
-    public void setExaqueo(boolean exaqueo) {
-        this.exaqueo = exaqueo;
-    }
-    
-    public void reset() {
-        boulderingScore.reset();
-        exaqueo = false;
-        leadScore.reset();
-        speedScore.reset();
     }
     
 }
