@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017
  * Mail : Hugo Da Roit - contact@hdaroit.fr
  * GitHub : https://github.com/Yaty
@@ -16,10 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package climbingcompranking.model.ranking;
+package climbingcompranking.view;
+
+import climbingcompranking.utils.Observer;
 
 /**
  *
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
-public enum RankType {TEXT, PDF};
+public abstract class Screen implements Observer {
+    protected View view;
+    
+    public Screen(View view) {
+        this.view = view;
+    }
+    
+    public abstract void setUp();
+}

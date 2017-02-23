@@ -18,8 +18,8 @@
  */
 package climbingcompranking;
 
-import climbingcompranking.model.Competition;
-import climbingcompranking.view.MainMenu;
+import climbingcompranking.controller.Controller;
+import climbingcompranking.view.View;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -28,11 +28,11 @@ import javafx.stage.Stage;
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
 public class ClimbingCompRanking extends Application {
-    public static Competition currentComp;
     
     @Override
     public void start(Stage primaryStage) {
-        new MainMenu(primaryStage);
+        Controller controller = new Controller();
+        new View(controller, primaryStage);
     }
 
     /**

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017
  * Mail : Hugo Da Roit - contact@hdaroit.fr
  * GitHub : https://github.com/Yaty
@@ -16,10 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package climbingcompranking.model.ranking;
+package climbingcompranking.view;
+
+import climbingcompranking.utils.Observable;
 
 /**
  *
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
-public enum RankType {TEXT, PDF};
+public class CompetitionMenu extends Screen {
+
+    public CompetitionMenu(View view) {
+        super(view);
+        setUp();
+    }
+
+    @Override
+    public void setUp() {
+        
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+}

@@ -58,4 +58,18 @@ public class GridPaneUtils {
             }
         }
     }
+
+    public static int getColumnCount(GridPane pane) {
+        int numColumns = pane.getColumnConstraints().size();
+        for (int i = 0; i < pane.getChildren().size(); i++) {
+            Node child = pane.getChildren().get(i);
+            if (child.isManaged()) {
+                Integer columnIndex = GridPane.getColumnIndex(child);
+                if(columnIndex != null){
+                    numColumns = Math.max(numColumns,columnIndex+1);
+                }
+            }
+        }
+        return numColumns;
+    }
 }

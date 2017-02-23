@@ -43,11 +43,26 @@ public enum Category {
     YOUTHE_FEMALE(I18n.MODEL.getString("YouthEF")), // Microbe
     YOUTHF_MALE(I18n.MODEL.getString("YouthFM")),  // Moustique
     YOUTHF_FEMALE(I18n.MODEL.getString("YouthFF")); // Moustique
+
+    public static Category getCategoryByName(String string) {
+        Category[] cates = Category.values();
+        for(int i = 0 ; i < cates.length ; i++)
+            if(cates[i].name.equals(string))
+                return cates[i];
+        return null;
+    }
     
     private final String name;
     
     private Category (String name) {
         this.name = name;
+    }
+    
+    public static String[] getNames() {
+        String[] names = new String[Category.values().length];
+        for(int i = 0 ; i < Category.values().length ; i++)
+            names[i] = Category.values()[i].name;
+        return names;
     }
     
     public String getCategoryName() {

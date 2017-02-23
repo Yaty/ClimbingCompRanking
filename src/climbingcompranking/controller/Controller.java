@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017
  * Mail : Hugo Da Roit - contact@hdaroit.fr
  * GitHub : https://github.com/Yaty
@@ -19,35 +19,28 @@
 package climbingcompranking.controller;
 
 import climbingcompranking.model.Competition;
-import climbingcompranking.model.ranking.RankType;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import climbingcompranking.model.climber.Category;
+import climbingcompranking.view.ClimberView;
+import climbingcompranking.view.CompetitionMenu;
+import climbingcompranking.view.View;
+import javafx.collections.ObservableList;
 
 /**
  *
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
-public class ButtonsController {
-    private Competition comp;
-    
-    public EventHandler<ActionEvent> infosButton = (ActionEvent event) -> {
-        System.out.println("Infos.");
-    };
-    
-    public EventHandler<ActionEvent> quitButton = (ActionEvent event) -> {
-        Platform.exit();
-        System.exit(0);
-    };
-    
-    public EventHandler<ActionEvent> createCompButton = (ActionEvent event) -> {
-        System.out.println("Create comp.");
-    };
-    
-    public void loadCompButton(String compName) {
-        comp = CompetitionLoader.loadComp(compName);
-        System.out.println(comp);
-        System.out.println("Rank : ");
-        System.out.println(comp.rank(RankType.TEXT));
+public class Controller {
+    private Competition competition; // model
+
+    public boolean createAComp(Competition.CompetitionType competType, String compName, ObservableList<ClimberView> climbers) {
+        competition = new Competition(competType, compName);
+        for(ClimberView climber : climbers)
+            competition.addClimber(climber.getId(), climber.getName(), climber.getLastname(), Category.valueOf(climber.getCategory()), climber.getClubname());
+        return true;
+    }
+
+    public void setScreen(CompetitionMenu compMenu) {
+        competition.removeObserver();
+        competition.addObserver(compMenu);
     }
 }

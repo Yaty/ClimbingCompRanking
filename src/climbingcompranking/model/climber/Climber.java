@@ -87,6 +87,10 @@ public class Climber {
         return rank;
     }
     
+    public Category getCategory() {
+        return category;
+    }
+    
     public String getClubName() {
         return clubName;
     }

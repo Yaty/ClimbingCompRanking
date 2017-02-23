@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017
  * Mail : Hugo Da Roit - contact@hdaroit.fr
  * GitHub : https://github.com/Yaty
@@ -18,51 +18,36 @@
  */
 package climbingcompranking.view;
 
-import climbingcompranking.controller.ButtonsController;
 import climbingcompranking.utils.GridPaneUtils;
 import climbingcompranking.utils.I18n;
+import climbingcompranking.utils.Observable;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 /**
  *
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
-public class MainMenu {
-    private final Stage primaryStage;
-    private final Scene scene;
-    private final GridPane root;
-    private final ButtonsController buttonsCtrl;
+public class MainMenu extends Screen {
     
-    public MainMenu(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        this.root = new GridPane();
-        this.scene = new Scene(root);
-        this.buttonsCtrl = new ButtonsController();
-        setupStage();
-        setupMainMenu();
+    public MainMenu(View view) {
+        super(view);
+        view.setRoot(new GridPane());
+        view.setScene(new Scene(view.getRoot()));
+        view.getStage().setScene(view.getScene());
+        setUp();
     }
 
-    private void setupStage() {
-        primaryStage.setWidth(1080);
-        primaryStage.setHeight(720);
-        primaryStage.setTitle(I18n.MENU.getString("Title"));
-        primaryStage.setResizable(false);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    private void setupMainMenu() {
-        root.getChildren().clear();
-        
-        root.setGridLinesVisible(true); // debug
+    @Override
+    public void setUp() {
+        view.getRoot().setGridLinesVisible(true); // debug
         
         /* Column constraints */
         ColumnConstraints column1 = new ColumnConstraints();
@@ -71,44 +56,48 @@ public class MainMenu {
         column2.setPercentWidth(25);
         ColumnConstraints column3 = new ColumnConstraints();
         column3.setPercentWidth(25);
-        root.getColumnConstraints().addAll(
+        view.getRoot().getColumnConstraints().addAll(
             column1,
             column2,
             column3
         );
         
         /* Buttons, images, labels ... */
-        Image climberImg = new Image("climbingcompranking/utils/resources/images/climber.jpg", scene.getWidth()/2, scene.getHeight(), false, true);
+        Image climberImg = new Image("climbingcompranking/utils/resources/images/climber.jpg", view.getScene().getWidth()/2, view.getScene().getHeight(), false, true);
         ImageView climberImgView = new ImageView(climberImg);
-        Label welcome = new Label(I18n.MENU.getString("Welcome") + ' ' + primaryStage.getTitle() + " !");
+        Label welcome = new Label(I18n.MENU.getString("Welcome") + ' ' + view.getStage().getTitle() + " !");
         Button createCompButton = new Button(I18n.MENU.getString("AddComp"));
-        createCompButton.setOnAction(buttonsCtrl.createCompButton);
-        ChoiceBox cb = new ChoiceBox();
-        cb.getItems().addAll(
-            "comp1",
-            "comp2",
-            "comp3"
-        );
-        cb.getSelectionModel().select(0);
-        Button loadComp = new Button(I18n.MENU.getString("LoadComp"));
-        loadComp.setOnAction(event -> buttonsCtrl.loadCompButton(cb.getSelectionModel().getSelectedItem().toString()));
-        Button infos = new Button(I18n.MENU.getString("Infos"));
-        infos.setOnAction(buttonsCtrl.infosButton);
+        createCompButton.setOnAction((ActionEvent event) -> {
+            view.setScreen(new CreateCompMenu(view));
+        });
+        Button loadCompButton = new Button(I18n.MENU.getString("LoadComp"));
+        loadCompButton.setOnAction((ActionEvent event) -> {
+            
+        });
+        Button infosButton = new Button(I18n.MENU.getString("Infos"));
+        infosButton.setOnAction((ActionEvent event) -> {
+            
+        });
         Button exit = new Button(I18n.MENU.getString("Exit"));
-        exit.setOnAction(buttonsCtrl.quitButton);
+        exit.setOnAction((ActionEvent event) -> {
+            Platform.exit();
+            System.exit(0);   
+        });
         
         /* Adding nodes to the gridpane */
-        root.add(welcome, 1, 0, 2, 1);
-        root.add(createCompButton, 1, 1, 2, 1);
-        root.add(cb, 1, 2);
-        root.add(loadComp, 2, 2);
-        root.add(infos, 1, 3, 2, 1);
-        root.add(exit, 1, 4, 2, 1);
-        root.add(climberImgView, 0, 0, 1, GridPaneUtils.getRowCount(root)); // must be the last element to add
+        view.getRoot().add(welcome, 1, 0, 2, 1);
+        view.getRoot().add(createCompButton, 1, 1, 2, 1);
+        view.getRoot().add(loadCompButton, 1, 2, 2, 1);
+        view.getRoot().add(infosButton, 1, 3, 2, 1);
+        view.getRoot().add(exit, 1, 4, 2, 1);
+        view.getRoot().add(climberImgView, 0, 0, 1, GridPaneUtils.getRowCount(view.getRoot())); // must be the last element to add
         
         /* Style */
-        GridPaneUtils.alignChildsInCenter(root);
-        GridPaneUtils.sizingRowsHeightEqually(root);
+        GridPaneUtils.alignChildsInCenter(view.getRoot());
+        GridPaneUtils.sizingRowsHeightEqually(view.getRoot());
     }
+
+    @Override
+    public void update(Observable o, Object arg) {}
     
 }
