@@ -19,6 +19,8 @@
 package climbingcompranking.view;
 
 import climbingcompranking.utils.Observer;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 
 /**
  *
@@ -29,6 +31,9 @@ public abstract class Screen implements Observer {
     
     public Screen(View view) {
         this.view = view;
+        view.setRoot(new GridPane());
+        view.setScene(new Scene(view.getRoot()));
+        view.getStage().setScene(view.getScene());
     }
     
     public abstract void setUp();

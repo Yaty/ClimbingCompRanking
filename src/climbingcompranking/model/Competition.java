@@ -60,7 +60,12 @@ public class Competition implements Observable {
             return null;
         }
         
-        public final String name;
+        private final String name;
+        
+        public String getName() {
+            return name;
+        }
+        
         private CompetitionType(String name) {
             this.name = name;
         }
@@ -71,6 +76,7 @@ public class Competition implements Observable {
     public Competition(CompetitionType compType, String name) {
         this.compType = compType;
         climbers = new HashMap<>();
+        observers = new ArrayList<>();
         this.name = name;
     }
     
@@ -110,13 +116,17 @@ public class Competition implements Observable {
     }
     
     public void addClimber(Climber climber) {
+        if(climbers.get(climber.getCategory()) == null && Category.valueOf(climber.getCategory().name()) != null)
+            climbers.put(climber.getCategory(), new ArrayList<>());
         climbers.get(climber.getCategory()).add(climber);
-        notifyObserver(this, name);
+        notifyObserver(this);
     }
     
     public void addClimber(int id, String name, String lastname, Category category, String clubName) {
+        if(climbers.get(category) == null && Category.valueOf(category.name()) != null)
+            climbers.put(category, new ArrayList<>());
         climbers.get(category).add(new Climber(id, name, lastname, category, compType, clubName));
-        notifyObserver(this, this.name);
+        notifyObserver(this);
     }
     
     @Override
@@ -130,8 +140,8 @@ public class Competition implements Observable {
     }
 
     @Override
-    public void notifyObserver(Observable o, Object arg) {
+    public void notifyObserver(Observable o) {
         for(Observer obs : observers)
-            obs.update(o, arg);
+            obs.update(o);
     }
 }

@@ -20,8 +20,6 @@ package climbingcompranking.view;
 
 import climbingcompranking.controller.Controller;
 import climbingcompranking.utils.I18n;
-import climbingcompranking.utils.Observable;
-import climbingcompranking.utils.Observer;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -41,7 +39,7 @@ public class View {
         this.controller = controller;
         this.primaryStage = primaryStage;
         this.setupStage();
-        this.screen = new MainMenu(this);
+        this.screen = new HomeScreen(this);
     }
     
     private void setupStage() {

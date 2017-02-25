@@ -25,11 +25,12 @@ import climbingcompranking.utils.GridPaneUtils;
 import climbingcompranking.utils.I18n;
 import climbingcompranking.utils.Observable;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ContextMenu;
@@ -41,28 +42,24 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 /**
  *
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
-public class CreateCompMenu extends Screen {
-    private final ObservableList<ClimberView> climberList;
+public class CreateCompScreen extends Screen {
+    private ObservableList<ClimberView> climberList;
     
-    public CreateCompMenu(View view) {
+    public CreateCompScreen(View view) {
         super(view);
-        climberList = FXCollections.observableArrayList();
-        view.setRoot(new GridPane());
-        view.setScene(new Scene(view.getRoot()));
-        view.getStage().setScene(view.getScene());
         setUp();
     }
 
     @Override
     public void setUp() {
         view.getRoot().setGridLinesVisible(true); // debug
+        climberList = FXCollections.observableArrayList();
         
         /* Column constraints */
         ColumnConstraints column1 = new ColumnConstraints();
@@ -104,16 +101,48 @@ public class CreateCompMenu extends Screen {
         // Competition name
         Label choiceCompNameLabel = new Label(I18n.MENU.getString("ChooseCompName") + " :");
         TextField compNameField = new TextField();
+        compNameField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if(!newValue) {
+                if(!compNameField.getText().matches("^[\\p{L} ]+$") || compNameField.getText().trim().length() == 0)
+                    compNameField.setStyle("-fx-text-box-border: red ;-fx-focus-color: red ;");
+                else
+                    compNameField.setStyle("-fx-text-box-border: white ;-fx-focus-color: white ;");
+            }
+        });
         
         // Add climbers
         Label addClimberLabel = new Label(I18n.MENU.getString("AddClimber") + " (" + I18n.MENU.getString("Optional") + ") :");
         
         TextField clubField = new TextField();
         clubField.promptTextProperty().set(I18n.MENU.getString("ClubName"));
+        clubField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if(!newValue) {
+                if(!clubField.getText().matches("^[\\p{L} ]+$")  || clubField.getText().trim().length() == 0)
+                    clubField.setStyle("-fx-text-box-border: red ;-fx-focus-color: red ;");
+                else
+                    clubField.setStyle("-fx-text-box-border: white ;-fx-focus-color: white ;");
+            }
+        });
         TextField lastnameField = new TextField();
         lastnameField.promptTextProperty().set(I18n.MENU.getString("Lastname"));
+        lastnameField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if(!newValue) {
+                if(!lastnameField.getText().matches("^[a-zA-Z ]+$") || lastnameField.getText().trim().length() == 0)
+                    compNameField.setStyle("-fx-text-box-border: red ;-fx-focus-color: red ;");
+                else
+                    lastnameField.setStyle("-fx-text-box-border: white ;-fx-focus-color: white ;");
+            }
+        });
         TextField nameField = new TextField();
         nameField.promptTextProperty().set(I18n.MENU.getString("Name"));
+        nameField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if(!newValue) {
+                if(!nameField.getText().matches("^[\\p{L} ]+$") || nameField.getText().trim().length() == 0)
+                    nameField.setStyle("-fx-text-box-border: red ;-fx-focus-color: red ;");
+                else
+                    nameField.setStyle("-fx-text-box-border: white ;-fx-focus-color: white ;");
+            }
+        });
         ChoiceBox categoryField = new ChoiceBox();
         categoryField.getItems().addAll((Object[]) Category.getNames());
         categoryField.getSelectionModel().selectFirst();
@@ -170,7 +199,14 @@ public class CreateCompMenu extends Screen {
             int id = 0;
             if(climbers.getItems().size() > 0)
                 id = climbers.getItems().get(climbers.getItems().size()-1).getId() + 1;
-            if(name.isEmpty() || lastname.isEmpty() || category == null || Category.getCategoryByName(category) == null) return;
+            if(!name.matches("^[\\p{L} ]+$") || name.trim().length() == 0 || !lastname.matches("^[\\p{L} ]+$") || lastname.trim().length() == 0 || (clubname.length() != 0 && !clubname.matches("^[\\p{L} ]+$") ) || category == null || Category.getCategoryByName(category) == null) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle(I18n.MENU.getString("Error"));
+                alert.setHeaderText(I18n.MENU.getString("ErrorAlertAddClimberHeader"));
+                alert.setContentText(I18n.MENU.getString("ErrorAlertAddClimberContent"));
+                alert.showAndWait();
+                return;
+            }
             climberList.add(new ClimberView(id, clubname, lastname, name, category));
         });
         
@@ -179,9 +215,16 @@ public class CreateCompMenu extends Screen {
         createComp.setOnAction((ActionEvent event) -> {
             CompetitionType competType = Competition.CompetitionType.nameToCompType((String) choiceCompType.getSelectionModel().getSelectedItem());
             String compName = compNameField.getText();
-            if(competType == null || compName.isEmpty()) return; // Can't create a competition without a comp type and a name
+            if(competType == null || !compName.matches("^[\\p{L} ]+$")) { // Can't create a competition without a comp type and a name
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle(I18n.MENU.getString("ErrorAlertTitle"));
+                alert.setHeaderText(I18n.MENU.getString("ErrorAlertCreateCompHeader"));
+                alert.setContentText(I18n.MENU.getString("ErrorAlertCreateCompContent"));
+                alert.showAndWait();
+                return;
+            }
             if(view.getController().createAComp(competType, compName, climbers.getItems())) {
-                CompetitionMenu compMenu = new CompetitionMenu(view);
+                CompetitionScreen compMenu = new CompetitionScreen(view, competType, compName, climbers.getItems());
                 view.getController().setScreen(compMenu);
                 view.setScreen(compMenu);
             }
@@ -211,6 +254,6 @@ public class CreateCompMenu extends Screen {
     }
 
     @Override
-    public void update(Observable o, Object arg) {}
+    public void update(Observable o) {}
     
 }

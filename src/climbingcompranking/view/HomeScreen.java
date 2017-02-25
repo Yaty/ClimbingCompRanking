@@ -23,25 +23,20 @@ import climbingcompranking.utils.I18n;
 import climbingcompranking.utils.Observable;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 
 /**
  *
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
-public class MainMenu extends Screen {
+public class HomeScreen extends Screen {
     
-    public MainMenu(View view) {
+    public HomeScreen(View view) {
         super(view);
-        view.setRoot(new GridPane());
-        view.setScene(new Scene(view.getRoot()));
-        view.getStage().setScene(view.getScene());
         setUp();
     }
 
@@ -68,7 +63,7 @@ public class MainMenu extends Screen {
         Label welcome = new Label(I18n.MENU.getString("Welcome") + ' ' + view.getStage().getTitle() + " !");
         Button createCompButton = new Button(I18n.MENU.getString("AddComp"));
         createCompButton.setOnAction((ActionEvent event) -> {
-            view.setScreen(new CreateCompMenu(view));
+            view.setScreen(new CreateCompScreen(view));
         });
         Button loadCompButton = new Button(I18n.MENU.getString("LoadComp"));
         loadCompButton.setOnAction((ActionEvent event) -> {
@@ -98,6 +93,6 @@ public class MainMenu extends Screen {
     }
 
     @Override
-    public void update(Observable o, Object arg) {}
+    public void update(Observable o) {}
     
 }

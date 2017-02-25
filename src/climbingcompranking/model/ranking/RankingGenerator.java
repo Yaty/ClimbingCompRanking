@@ -223,6 +223,7 @@ public class RankingGenerator {
         StringBuilder str = new StringBuilder();
         doTheRanking(compType);
         for(Map.Entry<Category, ArrayList<Climber>> climbers : climbersMap.entrySet()) {
+            if(climbers.getValue().isEmpty()) continue;
             str.append(climbers.getKey().getCategoryName()).append("\n");
             for(Climber climber : climbers.getValue())
                 str.append(climber.getFullName()).append(' ').append(climber.getRank().getOverallRank()).append("\n");
@@ -259,6 +260,7 @@ public class RankingGenerator {
                 
 
                 for(Map.Entry<Category, ArrayList<Climber>> climbersCategory : climbersMap.entrySet()) {
+                    if(climbersCategory.getValue().isEmpty()) continue;
                     document.newPage();
                     // Title
                     Paragraph title = new Paragraph(competitionName + " : " + climbersCategory.getKey().getCategoryName());

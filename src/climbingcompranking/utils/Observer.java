@@ -23,5 +23,5 @@ package climbingcompranking.utils;
  * @author Hugo Da Roit - contact@hdaroit.fr
  */
 public interface Observer {
-    public void update(Observable o, Object arg);
+    public void update(Observable o);
 }

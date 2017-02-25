@@ -72,14 +72,14 @@ public class RankingWithMultipleCategories {
         
         String[] wantedRanking =
         {
-            I18n.MODEL.getString("VeteranM"),
-            c4.getFullName() + " 1",
-            c5.getFullName() + " 2",
-            c6.getFullName() + " 3",
             I18n.MODEL.getString("SeniorM"),
             c1.getFullName() + " 1",
             c2.getFullName() + " 2",
-            c3.getFullName() + " 3"
+            c3.getFullName() + " 3",
+            I18n.MODEL.getString("VeteranM"),
+            c4.getFullName() + " 1",
+            c5.getFullName() + " 2",
+            c6.getFullName() + " 3"
         };
 
         assertArrayEquals(wantedRanking, lines);        
@@ -100,14 +100,14 @@ public class RankingWithMultipleCategories {
         
         String[] wantedRanking =
         {
-            I18n.MODEL.getString("VeteranM"),
-            c4.getFullName() + " 1",
-            c5.getFullName() + " 1",
-            c6.getFullName() + " 3",
             I18n.MODEL.getString("SeniorM"),
             c1.getFullName() + " 1",
             c2.getFullName() + " 1",
-            c3.getFullName() + " 3"
+            c3.getFullName() + " 3",
+            I18n.MODEL.getString("VeteranM"),
+            c4.getFullName() + " 1",
+            c5.getFullName() + " 1",
+            c6.getFullName() + " 3"
         };
 
         assertArrayEquals(wantedRanking, lines);          

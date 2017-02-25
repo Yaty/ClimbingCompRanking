@@ -20,9 +20,10 @@ package climbingcompranking.controller;
 
 import climbingcompranking.model.Competition;
 import climbingcompranking.model.climber.Category;
+import climbingcompranking.model.climber.Climber;
 import climbingcompranking.view.ClimberView;
-import climbingcompranking.view.CompetitionMenu;
-import climbingcompranking.view.View;
+import climbingcompranking.view.Screen;
+import java.util.ArrayList;
 import javafx.collections.ObservableList;
 
 /**
@@ -35,12 +36,23 @@ public class Controller {
     public boolean createAComp(Competition.CompetitionType competType, String compName, ObservableList<ClimberView> climbers) {
         competition = new Competition(competType, compName);
         for(ClimberView climber : climbers)
-            competition.addClimber(climber.getId(), climber.getName(), climber.getLastname(), Category.valueOf(climber.getCategory()), climber.getClubname());
+            competition.addClimber(climber.getId(), climber.getName(), climber.getLastname(), Category.getCategoryByName(climber.getCategory()), climber.getClubname());
         return true;
     }
 
-    public void setScreen(CompetitionMenu compMenu) {
+    public void setScreen(Screen compMenu) {
         competition.removeObserver();
         competition.addObserver(compMenu);
+    }
+
+    public boolean addCategory(String name) {
+        Category cate = Category.getCategoryByName(name);
+        if(cate == null) return false;
+        competition.getClimbers().put(cate, new ArrayList<>());
+        return true;
+    }
+
+    public void removeCategory(String text) {
+        competition.getClimbers().remove(Category.getCategoryByName(text));
     }
 }
